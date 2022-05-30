@@ -8,16 +8,20 @@ public class BTMoveTowards : BTNode
     public Transform target;
     private NavMeshAgent agent;
     private float stopDistance;
-    public BTMoveTowards(Transform _target, NavMeshAgent _agent, float _stopDistance)
+
+    private Blackboard blackboard;
+    public BTMoveTowards(Blackboard _blackboard, NavMeshAgent _agent, float _stopDistance)
     {
+        blackboard = _blackboard;
         stopDistance = _stopDistance;
         agent = _agent;
-        target = _target;
+        target = blackboard.GetValue<Transform>("target"); ;
         agent.stoppingDistance = stopDistance;
-        agent.SetDestination(_target.position);
+        agent.SetDestination(target.position);
     }
     public override void OnEnter()
     {
+        target = blackboard.GetValue<Transform>("target");
         if (!agent.pathPending && !agent.hasPath)
         {
             agent.SetDestination(target.position);
